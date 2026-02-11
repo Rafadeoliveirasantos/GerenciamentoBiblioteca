@@ -1,0 +1,20 @@
+# .NET
+bin/
+obj/
+*.user
+.vs/
+.vscode/
+
+# Node
+node_modules/
+dist/
+
+# Environment
+appsettings.Development.json
+
+# Uploads (não versionar imagens de usuários)
+uploads/*
+!uploads/.gitkeep
+!uploads/capas/
+uploads/capas/*
+!uploads/capas/.gitkeep

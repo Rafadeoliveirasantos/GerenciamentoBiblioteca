@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: biblioteca-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SqlServer2022!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+    networks:
+      - biblioteca-network
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: biblioteca-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BibliotecaDB;User Id=sa;Password=SqlServer2022!;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      - sqlserver
+    networks:
+      - biblioteca-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: biblioteca-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - biblioteca-network
+
+volumes:
+  sqldata:
+
+networks:
+  biblioteca-network:
+    driver: bridge
