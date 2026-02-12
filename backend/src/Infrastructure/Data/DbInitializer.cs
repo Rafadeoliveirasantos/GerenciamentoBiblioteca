@@ -7,9 +7,6 @@ public static class DbInitializer
 {
     public static async Task Initialize(BibliotecaDbContext context)
     {
-        // Aplica as migrations pendentes
-        await context.Database.MigrateAsync();
-
         // Verifica se já tem dados no banco
         var temDados = await context.Livros.AnyAsync();
         if (temDados)

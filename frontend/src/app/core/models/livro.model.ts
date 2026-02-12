@@ -9,6 +9,7 @@ export interface Livro {
   autorNome: string;
   generoId: string;
   generoNome: string;
+  semCapa?: boolean;
 }
 
 export interface LivroDto {
