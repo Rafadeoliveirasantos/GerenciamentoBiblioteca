@@ -4,32 +4,37 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class FileUploadService {
-  private readonly allowedExtensions = ['jpg', 'jpeg', 'png'];
-  private readonly maxFileSize = 5 * 1024 * 1024;
+  private readonly extensoesPermitidas = ['jpg', 'jpeg', 'png'];
+  private readonly tamanhoMaximo = 5 * 1024 * 1024; // 5MB
 
-  validateFile(file: File): { valid: boolean; error?: string } {
-    if (!file) {
+  // Valida se o arquivo é válido (tipo e tamanho)
+  validateFile(arquivo: File): { valid: boolean; error?: string } {
+    if (!arquivo) {
       return { valid: false, error: 'Nenhum arquivo selecionado' };
     }
 
-    const extension = file.name.split('.').pop()?.toLowerCase();
-    if (!extension || !this.allowedExtensions.includes(extension)) {
+    // Verifica extensão do arquivo
+    const extensao = arquivo.name.split('.').pop()?.toLowerCase();
+    if (!extensao || !this.extensoesPermitidas.includes(extensao)) {
       return { valid: false, error: 'Formato inválido. Apenas JPG, JPEG e PNG são permitidos' };
     }
 
-    if (file.size > this.maxFileSize) {
+    // Valida tamanho máximo
+    if (arquivo.size > this.tamanhoMaximo) {
+      console.log('Arquivo muito grande:', arquivo.size);
       return { valid: false, error: 'Arquivo muito grande. Tamanho máximo: 5MB' };
     }
 
     return { valid: true };
   }
 
-  getFilePreview(file: File): Promise<string> {
+  // Gera preview do arquivo pra mostrar antes do upload
+  getFilePreview(arquivo: File): Promise<string> {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target?.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      const leitor = new FileReader();
+      leitor.onload = (e) => resolve(e.target?.result as string);
+      leitor.onerror = reject;
+      leitor.readAsDataURL(arquivo);
     });
   }
 }

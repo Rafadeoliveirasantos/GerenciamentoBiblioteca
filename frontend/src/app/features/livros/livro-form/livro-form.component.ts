@@ -28,7 +28,7 @@ import { Genero } from '../../../core/models/genero.model';
   template: `
     <h2 mat-dialog-title>{{ data ? 'Editar' : 'Novo' }} Livro</h2>
     <mat-dialog-content>
-      <form [formGroup]="form">
+      <form [formGroup]="formulario">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Título</mat-label>
           <input matInput formControlName="titulo">
@@ -44,7 +44,7 @@ import { Genero } from '../../../core/models/genero.model';
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Autor</mat-label>
           <mat-select formControlName="autorId">
-            <mat-option *ngFor="let autor of autores" [value]="autor.id">
+            <mat-option *ngFor="let autor of listaAutores" [value]="autor.id">
               {{ autor.nome }}
             </mat-option>
           </mat-select>
@@ -52,7 +52,7 @@ import { Genero } from '../../../core/models/genero.model';
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Gênero</mat-label>
           <mat-select formControlName="generoId">
-            <mat-option *ngFor="let genero of generos" [value]="genero.id">
+            <mat-option *ngFor="let genero of listaGeneros" [value]="genero.id">
               {{ genero.nome }}
             </mat-option>
           </mat-select>
@@ -69,7 +69,7 @@ import { Genero } from '../../../core/models/genero.model';
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="dialogRef.close()">Cancelar</button>
-      <button mat-raised-button color="primary" (click)="save()" [disabled]="!form.valid">Salvar</button>
+      <button mat-raised-button color="primary" (click)="salvar()" [disabled]="!formulario.valid">Salvar</button>
     </mat-dialog-actions>
   `,
   styles: [`
@@ -80,9 +80,9 @@ import { Genero } from '../../../core/models/genero.model';
   `]
 })
 export class LivroFormComponent implements OnInit {
-  form: FormGroup;
-  autores: Autor[] = [];
-  generos: Genero[] = [];
+  formulario: FormGroup;
+  listaAutores: Autor[] = [];
+  listaGeneros: Genero[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -92,7 +92,8 @@ export class LivroFormComponent implements OnInit {
     public dialogRef: MatDialogRef<LivroFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Livro
   ) {
-    this.form = this.fb.group({
+    // Cria o formulário com validações
+    this.formulario = this.fb.group({
       titulo: ['', Validators.required],
       isbn: ['', Validators.required],
       anoPublicacao: ['', [Validators.required, Validators.min(1000)]],
@@ -102,26 +103,39 @@ export class LivroFormComponent implements OnInit {
       sinopse: ['']
     });
 
+    // Se tiver dados, é edição
     if (data) {
-      this.form.patchValue(data);
+      this.formulario.patchValue(data);
+      console.log('Editando livro:', data.titulo);
     }
   }
 
   ngOnInit(): void {
-    this.autorService.autores$.subscribe(autores => this.autores = autores);
-    this.generoService.generos$.subscribe(generos => this.generos = generos);
+    // Carrega lista de autores pro dropdown
+    this.autorService.autores$.subscribe(autores => this.listaAutores = autores);
+    // Carrega lista de gêneros pro dropdown
+    this.generoService.generos$.subscribe(generos => this.listaGeneros = generos);
   }
 
-  save(): void {
-    if (this.form.valid) {
-      const livro = this.form.value;
-      const operation = this.data
-        ? this.livroService.update(this.data.id, livro)
-        : this.livroService.create(livro);
+  // FIXME: melhorar tratamento de erro com snackbar
+  salvar(): void {
+    if (this.formulario.valid) {
+      const dadosLivro = this.formulario.value;
+      
+      // Se tem ID, é update, senão é create
+      const operacao = this.data
+        ? this.livroService.update(this.data.id, dadosLivro)
+        : this.livroService.create(dadosLivro);
 
-      operation.subscribe({
-        next: () => this.dialogRef.close(true),
-        error: (error) => alert(error.error?.message || 'Erro ao salvar livro')
+      operacao.subscribe({
+        next: () => {
+          console.log('Livro salvo com sucesso');
+          this.dialogRef.close(true);
+        },
+        error: (erro) => {
+          console.log('Erro ao salvar:', erro);
+          alert(erro.error?.message || 'Erro ao salvar livro');
+        }
       });
     }
   }

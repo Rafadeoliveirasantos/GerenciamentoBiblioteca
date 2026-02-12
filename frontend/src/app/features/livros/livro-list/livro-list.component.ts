@@ -32,11 +32,11 @@ import { UploadCapaComponent } from '../../../shared/components/upload-capa/uplo
           Novo Livro
         </button>
       </div>
-      <div *ngIf="loading" class="loading-spinner">
+      <div *ngIf="carregando" class="loading-spinner">
         <mat-spinner></mat-spinner>
       </div>
-      <div class="grid" *ngIf="!loading">
-        <div class="book-card" *ngFor="let livro of livros">
+      <div class="grid" *ngIf="!carregando">
+        <div class="book-card" *ngFor="let livro of listaLivros">
           <img [src]="livro.capaUrl || 'assets/no-cover.png'" 
                [alt]="livro.titulo" 
                class="book-cover"
@@ -83,8 +83,8 @@ import { UploadCapaComponent } from '../../../shared/components/upload-capa/uplo
   `]
 })
 export class LivroListComponent implements OnInit {
-  livros: Livro[] = [];
-  loading = false;
+  listaLivros: Livro[] = [];
+  carregando = false;
 
   constructor(
     private livroService: LivroService,
@@ -94,20 +94,25 @@ export class LivroListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadData();
+    this.carregarDados();
   }
 
-  loadData(): void {
-    this.loading = true;
+  // Carrega lista de livros, autores e gêneros
+  carregarDados(): void {
+    this.carregando = true;
+    // Pré-carrega autores e gêneros pro dropdown
     this.autorService.getAll().subscribe();
     this.generoService.getAll().subscribe();
+    
     this.livroService.getAll().subscribe({
-      next: (livros) => {
-        this.livros = livros;
-        this.loading = false;
+      next: (dados) => {
+        this.listaLivros = dados;
+        console.log('Livros carregados:', dados.length);
+        this.carregando = false;
       },
-      error: () => {
-        this.loading = false;
+      error: (erro) => {
+        console.log('Erro ao carregar livros:', erro);
+        this.carregando = false;
       }
     });
   }
@@ -118,9 +123,9 @@ export class LivroListComponent implements OnInit {
       data: livro
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadData();
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        this.carregarDados();
       }
     });
   }
@@ -131,17 +136,20 @@ export class LivroListComponent implements OnInit {
       data: livro
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadData();
+    dialogRef.afterClosed().subscribe(resultado => {
+      if (resultado) {
+        // Recarrega a lista pra mostrar a nova capa
+        this.carregarDados();
       }
     });
   }
 
+  // TODO: adicionar confirmação com modal do Material
   delete(livro: Livro): void {
     if (confirm(`Deseja realmente excluir o livro "${livro.titulo}"?`)) {
       this.livroService.delete(livro.id).subscribe(() => {
-        this.loadData();
+        console.log('Livro excluído:', livro.titulo);
+        this.carregarDados();
       });
     }
   }

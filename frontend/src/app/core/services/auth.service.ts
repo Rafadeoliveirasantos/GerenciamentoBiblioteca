@@ -9,34 +9,39 @@ import { LoginRequest, TokenResponse } from '../models/auth.model';
 })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
-  private tokenSubject = new BehaviorSubject<string | null>(this.getToken());
+  private tokenSubject = new BehaviorSubject<string | null>(this.obterToken());
   public token$ = this.tokenSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: LoginRequest): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
-        this.setToken(response.token);
-        this.tokenSubject.next(response.token);
+  login(credenciais: LoginRequest): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(`${this.apiUrl}/login`, credenciais).pipe(
+      tap(resposta => {
+        console.log('Login realizado com sucesso');
+        this.salvarToken(resposta.token);
+        this.tokenSubject.next(resposta.token);
       })
     );
   }
 
   logout(): void {
+    console.log('Logout realizado');
     localStorage.removeItem('token');
     this.tokenSubject.next(null);
   }
 
+  // Valida se usuário está logado
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    const token = this.obterToken();
+    return !!token;
   }
 
-  getToken(): string | null {
+  obterToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  private setToken(token: string): void {
+  // TODO: implementar refresh token
+  private salvarToken(token: string): void {
     localStorage.setItem('token', token);
   }
 }

@@ -25,26 +25,31 @@ public class LivroService
         _fileService = fileService;
     }
 
+    // TODO: adicionar paginação aqui no futuro
     public async Task<IEnumerable<LivroViewModel>> GetAllAsync()
     {
-        var livros = await _livroRepository.GetAllAsync();
-        return livros.Select(MapToViewModel);
+        var resultado = await _livroRepository.GetAllAsync();
+        return resultado.Select(MapToViewModel);
     }
 
     public async Task<LivroViewModel?> GetByIdAsync(Guid id)
     {
-        var livro = await _livroRepository.GetByIdAsync(id);
-        return livro != null ? MapToViewModel(livro) : null;
+        var livroEncontrado = await _livroRepository.GetByIdAsync(id);
+        return livroEncontrado != null ? MapToViewModel(livroEncontrado) : null;
     }
 
     public async Task<LivroViewModel> CreateAsync(LivroDto dto)
     {
-        if (!await _autorRepository.ExistsAsync(dto.AutorId))
+        // Valida se o autor existe antes de criar o livro
+        var autorExiste = await _autorRepository.ExistsAsync(dto.AutorId);
+        if (!autorExiste)
             throw new InvalidOperationException("Autor não encontrado");
 
+        // Valida se o gênero existe
         if (!await _generoRepository.ExistsAsync(dto.GeneroId))
             throw new InvalidOperationException("Gênero não encontrado");
 
+        // FIXME: melhorar validação de ISBN (verificar formato)
         if (await _livroRepository.ISBNExistsAsync(dto.ISBN))
             throw new InvalidOperationException("ISBN já cadastrado");
 
@@ -60,14 +65,15 @@ public class LivroService
             GeneroId = dto.GeneroId
         };
 
-        var created = await _livroRepository.CreateAsync(livro);
-        return MapToViewModel(created);
+        Livro criado = await _livroRepository.CreateAsync(livro);
+        return MapToViewModel(criado);
     }
 
     public async Task<LivroViewModel?> UpdateAsync(Guid id, LivroDto dto)
     {
-        var livro = await _livroRepository.GetByIdAsync(id);
-        if (livro == null) return null;
+        // Busca o livro no banco antes de atualizar
+        var livroExistente = await _livroRepository.GetByIdAsync(id);
+        if (livroExistente == null) return null;
 
         if (!await _autorRepository.ExistsAsync(dto.AutorId))
             throw new InvalidOperationException("Autor não encontrado");
@@ -75,19 +81,21 @@ public class LivroService
         if (!await _generoRepository.ExistsAsync(dto.GeneroId))
             throw new InvalidOperationException("Gênero não encontrado");
 
+        // Valida se o ISBN já existe em outro livro
         if (await _livroRepository.ISBNExistsAsync(dto.ISBN, id))
             throw new InvalidOperationException("ISBN já cadastrado");
 
-        livro.Titulo = dto.Titulo;
-        livro.ISBN = dto.ISBN;
-        livro.AnoPublicacao = dto.AnoPublicacao;
-        livro.Sinopse = dto.Sinopse;
-        livro.CapaUrl = dto.CapaUrl;
-        livro.AutorId = dto.AutorId;
-        livro.GeneroId = dto.GeneroId;
+        // Atualiza os dados do livro
+        livroExistente.Titulo = dto.Titulo;
+        livroExistente.ISBN = dto.ISBN;
+        livroExistente.AnoPublicacao = dto.AnoPublicacao;
+        livroExistente.Sinopse = dto.Sinopse;
+        livroExistente.CapaUrl = dto.CapaUrl;
+        livroExistente.AutorId = dto.AutorId;
+        livroExistente.GeneroId = dto.GeneroId;
 
-        var updated = await _livroRepository.UpdateAsync(livro);
-        return MapToViewModel(updated);
+        var atualizado = await _livroRepository.UpdateAsync(livroExistente);
+        return MapToViewModel(atualizado);
     }
 
     public async Task<bool> DeleteAsync(Guid id)
@@ -105,34 +113,40 @@ public class LivroService
         if (livro == null)
             throw new InvalidOperationException("Livro não encontrado");
 
+        // Valida o arquivo antes de processar
         if (!_fileService.ValidarArquivo(arquivo))
             throw new InvalidOperationException("Arquivo inválido. Apenas JPG, JPEG e PNG são permitidos (máximo 5MB)");
 
+        Console.WriteLine($"Processando upload da capa do livro: {livro.Titulo}");
+
+        // Remove a capa antiga se existir (exceto URLs externas)
         if (!string.IsNullOrEmpty(livro.CapaUrl) && !livro.CapaUrl.StartsWith("http"))
         {
             await _fileService.DeletarCapaAsync(livro.CapaUrl);
         }
 
-        var caminhoArquivo = await _fileService.SalvarCapaAsync(arquivo, livro.ISBN);
+        string caminhoArquivo = await _fileService.SalvarCapaAsync(arquivo, livro.ISBN);
         livro.CapaUrl = caminhoArquivo;
 
         await _livroRepository.UpdateAsync(livro);
+        Console.WriteLine($"Capa salva com sucesso: {caminhoArquivo}");
         return caminhoArquivo;
     }
 
     public async Task<bool> RemoverCapaAsync(Guid id)
     {
-        var livro = await _livroRepository.GetByIdAsync(id);
-        if (livro == null || string.IsNullOrEmpty(livro.CapaUrl))
+        var livroEncontrado = await _livroRepository.GetByIdAsync(id);
+        if (livroEncontrado == null || string.IsNullOrEmpty(livroEncontrado.CapaUrl))
             return false;
 
-        if (!livro.CapaUrl.StartsWith("http"))
+        // Só deleta arquivos locais, não URLs externas
+        if (!livroEncontrado.CapaUrl.StartsWith("http"))
         {
-            await _fileService.DeletarCapaAsync(livro.CapaUrl);
+            await _fileService.DeletarCapaAsync(livroEncontrado.CapaUrl);
         }
 
-        livro.CapaUrl = null;
-        await _livroRepository.UpdateAsync(livro);
+        livroEncontrado.CapaUrl = null;
+        await _livroRepository.UpdateAsync(livroEncontrado);
         return true;
     }
 

@@ -7,13 +7,20 @@ public static class DbInitializer
 {
     public static async Task Initialize(BibliotecaDbContext context)
     {
+        // Aplica as migrations pendentes
         await context.Database.MigrateAsync();
 
-        if (await context.Livros.AnyAsync())
+        // Verifica se já tem dados no banco
+        var temDados = await context.Livros.AnyAsync();
+        if (temDados)
         {
+            Console.WriteLine("Banco já inicializado, pulando seed...");
             return;
         }
 
+        Console.WriteLine("Iniciando seed do banco de dados...");
+
+        // Cria os gêneros literários
         var generos = new[]
         {
             new Genero { Id = Guid.NewGuid(), Nome = "Romance", Descricao = "Obras de ficção narrativa" },
@@ -25,7 +32,10 @@ public static class DbInitializer
 
         await context.Generos.AddRangeAsync(generos);
         await context.SaveChangesAsync();
+        Console.WriteLine($"{generos.Length} gêneros criados");
 
+        // TODO: adicionar mais autores contemporâneos
+        // Cria os autores clássicos da literatura brasileira
         var autores = new[]
         {
             new Autor { Id = Guid.NewGuid(), Nome = "Machado de Assis", Biografia = "Joaquim Maria Machado de Assis foi um escritor brasileiro, considerado por muitos críticos o maior nome da literatura brasileira.", DataNascimento = new DateTime(1839, 6, 21) },
@@ -44,7 +54,9 @@ public static class DbInitializer
 
         await context.Autores.AddRangeAsync(autores);
         await context.SaveChangesAsync();
+        Console.WriteLine($"{autores.Length} autores criados");
 
+        // Popula os livros com obras clássicas
         var livros = new[]
         {
             new Livro
@@ -271,5 +283,7 @@ public static class DbInitializer
 
         await context.Livros.AddRangeAsync(livros);
         await context.SaveChangesAsync();
+        Console.WriteLine($"{livros.Length} livros criados");
+        Console.WriteLine("Seed concluído com sucesso!");
     }
 }

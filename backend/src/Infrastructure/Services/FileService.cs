@@ -20,16 +20,19 @@ public class FileService : IFileService
 
     public async Task<string> SalvarCapaAsync(IFormFile arquivo, string isbn)
     {
-        var extension = Path.GetExtension(arquivo.FileName).ToLowerInvariant();
-        var fileName = $"{isbn.Replace("-", "")}_{Guid.NewGuid()}{extension}";
-        var filePath = Path.Combine(_uploadPath, fileName);
+        // Gera nome único pro arquivo usando ISBN + GUID
+        string extension = Path.GetExtension(arquivo.FileName).ToLowerInvariant();
+        string nomeArquivo = $"{isbn.Replace("-", "")}_{Guid.NewGuid()}{extension}";
+        var caminhoCompleto = Path.Combine(_uploadPath, nomeArquivo);
 
-        using (var stream = new FileStream(filePath, FileMode.Create))
+        Console.WriteLine($"Salvando capa: {nomeArquivo}");
+
+        using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
         {
             await arquivo.CopyToAsync(stream);
         }
 
-        return $"/uploads/capas/{fileName}";
+        return $"/uploads/capas/{nomeArquivo}";
     }
 
     public Task DeletarCapaAsync(string caminhoArquivo)
@@ -37,12 +40,14 @@ public class FileService : IFileService
         if (string.IsNullOrEmpty(caminhoArquivo))
             return Task.CompletedTask;
 
-        var fileName = Path.GetFileName(caminhoArquivo);
-        var filePath = Path.Combine(_uploadPath, fileName);
+        string nomeArquivo = Path.GetFileName(caminhoArquivo);
+        string caminhoCompleto = Path.Combine(_uploadPath, nomeArquivo);
 
-        if (File.Exists(filePath))
+        // Deleta o arquivo se ele existir
+        if (File.Exists(caminhoCompleto))
         {
-            File.Delete(filePath);
+            File.Delete(caminhoCompleto);
+            Console.WriteLine($"Capa deletada: {nomeArquivo}");
         }
 
         return Task.CompletedTask;
@@ -53,10 +58,12 @@ public class FileService : IFileService
         if (arquivo == null || arquivo.Length == 0)
             return false;
 
+        // Valida tamanho máximo (5MB)
         if (arquivo.Length > MaxFileSize)
             return false;
 
-        var extension = Path.GetExtension(arquivo.FileName).ToLowerInvariant();
-        return _allowedExtensions.Contains(extension);
+        // Valida extensão do arquivo
+        var extensao = Path.GetExtension(arquivo.FileName).ToLowerInvariant();
+        return _allowedExtensions.Contains(extensao);
     }
 }
