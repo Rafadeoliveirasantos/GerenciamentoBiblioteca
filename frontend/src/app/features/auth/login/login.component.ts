@@ -43,7 +43,7 @@ import { AuthService } from '../../../core/services/auth.service';
               <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
             </button>
           </form>
-          <div class="hint">Usuário: admin | Senha: Admin@123</div>
+          <div class="hint">Usuário: admin | Senha: Admin&#64;123</div>
         </mat-card-content>
       </mat-card>
     </div>
