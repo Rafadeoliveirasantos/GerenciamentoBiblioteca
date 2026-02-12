@@ -101,9 +101,15 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Aplica migrations e inicializa o banco de dados
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<BibliotecaDbContext>();
+    
+    // Aplica as migrations pendentes automaticamente
+    await context.Database.MigrateAsync();
+    
+    // Popula o banco com dados iniciais
     await DbInitializer.Initialize(context);
 }
 
