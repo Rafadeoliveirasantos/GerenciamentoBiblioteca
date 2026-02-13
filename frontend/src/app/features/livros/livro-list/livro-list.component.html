@@ -1,0 +1,72 @@
+<div class="livros-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>📚 Biblioteca de Livros</h1>
+
+    <!-- SEM FILTRO -->
+    <p class="subtitle" *ngIf="!generoNomeFiltro">
+      Explore nossa coleção completa
+    </p>
+
+    <!-- COM FILTRO -->
+    <div class="filtro-ativo" *ngIf="generoNomeFiltro">
+      <div class="filtro-badge">
+        <mat-icon>filter_list</mat-icon>
+        <span>Mostrando livros de: <strong>{{ generoNomeFiltro }}</strong></span>
+      </div>
+      <button mat-raised-button color="warn" (click)="limparFiltro()">
+        <mat-icon>close</mat-icon>
+        Limpar filtro
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="carregando" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando livros...</p>
+  </div>
+
+  <!-- LIVROS FILTRADOS -->
+  <div *ngIf="!carregando && livrosFiltrados.length > 0" class="livros-grid">
+    <div class="livro-card" *ngFor="let livro of livrosFiltrados; let i = index">
+      <div class="capa-container">
+        <img
+          *ngIf="livro.capaUrl"
+          [src]="livro.capaUrl"
+          [alt]="livro.titulo"
+          class="capa"
+        >
+        <div
+          *ngIf="!livro.capaUrl"
+          class="placeholder"
+          [style.background]="getPlaceholderColor(i)"
+        >
+          <span class="placeholder-icon">📚</span>
+        </div>
+      </div>
+      <div class="livro-info">
+        <h3>{{ livro.titulo }}</h3>
+        <p class="livro-autor">{{ livro.autorNome }}</p>
+        <p class="livro-genero">{{ livro.generoNome }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NENHUM LIVRO NESTE GÊNERO -->
+  <div *ngIf="!carregando && livrosFiltrados.length === 0 && generoNomeFiltro" class="empty-state">
+    <div class="empty-icon">📚</div>
+    <h2>Nenhum livro encontrado</h2>
+    <p>Não temos livros de <strong>{{ generoNomeFiltro }}</strong> no momento.</p>
+    <button mat-raised-button color="primary" (click)="limparFiltro()">
+      <mat-icon>arrow_back</mat-icon>
+      Ver todos os livros
+    </button>
+  </div>
+
+  <!-- NENHUM LIVRO CADASTRADO -->
+  <div *ngIf="!carregando && livros.length === 0" class="empty-state">
+    <div class="empty-icon">📚</div>
+    <h2>Nenhum livro cadastrado</h2>
+  </div>
+</div>

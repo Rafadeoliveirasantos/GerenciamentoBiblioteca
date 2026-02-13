@@ -17,270 +17,281 @@ public static class DbInitializer
 
         Console.WriteLine("Iniciando seed do banco de dados...");
 
-        // Cria os gêneros literários
+        // Cria os gêneros literários modernos
         var generos = new[]
         {
-            new Genero { Id = Guid.NewGuid(), Nome = "Romance", Descricao = "Obras de ficção narrativa" },
-            new Genero { Id = Guid.NewGuid(), Nome = "Realismo", Descricao = "Movimento literário realista" },
-            new Genero { Id = Guid.NewGuid(), Nome = "Modernismo", Descricao = "Literatura modernista brasileira" },
-            new Genero { Id = Guid.NewGuid(), Nome = "Regionalismo", Descricao = "Literatura regionalista" },
-            new Genero { Id = Guid.NewGuid(), Nome = "Romantismo", Descricao = "Literatura romântica" }
+            new Genero { Id = Guid.NewGuid(), Nome = "Romance", Descricao = "Romances contemporâneos" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Suspense", Descricao = "Thrillers e mistérios" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Juvenil", Descricao = "Literatura jovem adulto" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Literatura Brasileira", Descricao = "Autores brasileiros contemporâneos" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Fantasia", Descricao = "Ficção fantástica" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Autoajuda", Descricao = "Desenvolvimento pessoal" },
+            new Genero { Id = Guid.NewGuid(), Nome = "Não-ficção", Descricao = "Obras de não-ficção" }
         };
 
+        Console.WriteLine("Adicionando gêneros...");
         await context.Generos.AddRangeAsync(generos);
         await context.SaveChangesAsync();
-        Console.WriteLine($"{generos.Length} gêneros criados");
+        Console.WriteLine($"✅ {generos.Length} gêneros criados com sucesso");
 
-        // TODO: adicionar mais autores contemporâneos
-        // Cria os autores clássicos da literatura brasileira
+        // Cria os autores de best-sellers modernos
         var autores = new[]
         {
-            new Autor { Id = Guid.NewGuid(), Nome = "Machado de Assis", Biografia = "Joaquim Maria Machado de Assis foi um escritor brasileiro, considerado por muitos críticos o maior nome da literatura brasileira.", DataNascimento = new DateTime(1839, 6, 21) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Guimarães Rosa", Biografia = "João Guimarães Rosa foi um escritor, diplomata, novelista, contista e médico brasileiro.", DataNascimento = new DateTime(1908, 6, 27) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Aluísio Azevedo", Biografia = "Aluísio Tancredo Gonçalves de Azevedo foi um escritor brasileiro, considerado um dos principais representantes do naturalismo no Brasil.", DataNascimento = new DateTime(1857, 4, 14) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Jorge Amado", Biografia = "Jorge Leal Amado de Faria foi um dos mais famosos e traduzidos escritores brasileiros de todos os tempos.", DataNascimento = new DateTime(1912, 8, 10) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Clarice Lispector", Biografia = "Clarice Lispector foi uma escritora e jornalista nascida na Ucrânia e naturalizada brasileira.", DataNascimento = new DateTime(1920, 12, 10) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Graciliano Ramos", Biografia = "Graciliano Ramos de Oliveira foi um romancista, cronista, contista, jornalista, político e memorialista brasileiro.", DataNascimento = new DateTime(1892, 10, 27) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Rachel de Queiroz", Biografia = "Rachel de Queiroz foi uma escritora, tradutora, romancista, cronista, jornalista e importante dramaturga brasileira.", DataNascimento = new DateTime(1910, 11, 17) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Mário de Andrade", Biografia = "Mário Raul de Morais Andrade foi um poeta, escritor, crítico literário, musicólogo, folclorista e ensaísta brasileiro.", DataNascimento = new DateTime(1893, 10, 9) },
-            new Autor { Id = Guid.NewGuid(), Nome = "José de Alencar", Biografia = "José Martiniano de Alencar foi um jornalista, político, advogado, orador, crítico, cronista, polemista, romancista e dramaturgo brasileiro.", DataNascimento = new DateTime(1829, 5, 1) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Lima Barreto", Biografia = "Afonso Henriques de Lima Barreto foi um jornalista e um dos mais importantes escritores libertários brasileiros.", DataNascimento = new DateTime(1881, 5, 13) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Érico Veríssimo", Biografia = "Érico Lopes Veríssimo foi um escritor brasileiro, autor de romances como O Tempo e o Vento.", DataNascimento = new DateTime(1905, 12, 17) },
-            new Autor { Id = Guid.NewGuid(), Nome = "Cecília Meireles", Biografia = "Cecília Benevides de Carvalho Meireles foi uma poetisa, pintora, professora e jornalista brasileira.", DataNascimento = new DateTime(1901, 11, 7) }
+            new Autor { Id = Guid.NewGuid(), Nome = "John Green", Biografia = "Autor americano de best-sellers juvenis, conhecido por 'A Culpa é das Estrelas'.", DataNascimento = new DateTime(1977, 8, 24) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Colleen Hoover", Biografia = "Autora americana de romances contemporâneos, fenômeno do TikTok.", DataNascimento = new DateTime(1979, 12, 11) },
+            new Autor { Id = Guid.NewGuid(), Nome = "R.J. Palacio", Biografia = "Autora americana conhecida por 'Extraordinário'.", DataNascimento = new DateTime(1963, 7, 13) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Itamar Vieira Junior", Biografia = "Escritor brasileiro, vencedor do Prêmio Jabuti por 'Torto Arado'.", DataNascimento = new DateTime(1979, 1, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Alex Michaelides", Biografia = "Autor britânico-cipriota de thrillers psicológicos.", DataNascimento = new DateTime(1977, 9, 4) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Jenny Han", Biografia = "Autora americana de romances juvenis, conhecida pela trilogia 'Para Todos os Garotos'.", DataNascimento = new DateTime(1980, 9, 3) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Matthew Quick", Biografia = "Autor americano conhecido por 'O Lado Bom da Vida'.", DataNascimento = new DateTime(1973, 1, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Kiera Cass", Biografia = "Autora americana de ficção juvenil, criadora da série 'A Seleção'.", DataNascimento = new DateTime(1981, 5, 19) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Raphael Montes", Biografia = "Escritor brasileiro de thrillers e suspense.", DataNascimento = new DateTime(1990, 10, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Hal Elrod", Biografia = "Autor americano de desenvolvimento pessoal, criador de 'O Milagre da Manhã'.", DataNascimento = new DateTime(1979, 5, 30) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Djamila Ribeiro", Biografia = "Filósofa, feminista e escritora brasileira.", DataNascimento = new DateTime(1980, 1, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Beth O'Leary", Biografia = "Autora britânica de romances contemporâneos.", DataNascimento = new DateTime(1992, 1, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Charlie Donlea", Biografia = "Autor americano de thrillers e mistérios.", DataNascimento = new DateTime(1970, 1, 1) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Ailton Krenak", Biografia = "Líder indígena, ambientalista e escritor brasileiro.", DataNascimento = new DateTime(1953, 9, 29) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Padre Fábio de Melo", Biografia = "Padre, cantor e escritor brasileiro.", DataNascimento = new DateTime(1971, 4, 3) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Carol S. Dweck", Biografia = "Psicóloga e professora americana, autora de 'Mindset'.", DataNascimento = new DateTime(1946, 10, 17) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Paula Pimenta", Biografia = "Escritora brasileira de literatura juvenil.", DataNascimento = new DateTime(1976, 10, 16) },
+            new Autor { Id = Guid.NewGuid(), Nome = "Augusto Cury", Biografia = "Psiquiatra e escritor brasileiro.", DataNascimento = new DateTime(1958, 10, 2) }
         };
 
+        Console.WriteLine("Adicionando autores...");
         await context.Autores.AddRangeAsync(autores);
         await context.SaveChangesAsync();
-        Console.WriteLine($"{autores.Length} autores criados");
+        Console.WriteLine($"✅ {autores.Length} autores criados com sucesso");
 
-        // Popula os livros com obras clássicas
+        // Popula os livros com best-sellers modernos (2010-2025)
         var livros = new[]
         {
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Dom Casmurro",
-                ISBN = "978-8535911664",
-                AnoPublicacao = 1899,
-                Sinopse = "A história de Bentinho e Capitu é um dos maiores clássicos da literatura brasileira. Narrado em primeira pessoa, o livro conta a história de amor e ciúme entre os dois personagens.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51fHHjVMJyL._SY445_SX342_.jpg",
+                Titulo = "A Culpa é das Estrelas",
+                ISBN = "978-8580572261",
+                AnoPublicacao = 2012,
+                Sinopse = "Hazel e Gus são dois adolescentes que se conhecem em um Grupo de Apoio para Crianças com Câncer. Juntos, eles compartilham um humor inteligente e um desprezo por tudo que é convencional.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/evuwt6Z5fVcC?fife=w400-h600",
                 AutorId = autores[0].Id,
-                GeneroId = generos[1].Id
+                GeneroId = generos[0].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Memórias Póstumas de Brás Cubas",
-                ISBN = "978-8535911671",
-                AnoPublicacao = 1881,
-                Sinopse = "Narrado por um defunto, este romance revolucionou a literatura brasileira com seu estilo inovador e crítica social mordaz.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51jJu+oRIpL._SY445_SX342_.jpg",
-                AutorId = autores[0].Id,
-                GeneroId = generos[1].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Grande Sertão: Veredas",
-                ISBN = "978-8535908770",
-                AnoPublicacao = 1956,
-                Sinopse = "Obra-prima de Guimarães Rosa, narra a história de Riobaldo, um jagunço que relembra sua vida no sertão mineiro.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51VKlxKf7pL._SY445_SX342_.jpg",
+                Titulo = "É Assim Que Acaba",
+                ISBN = "978-8501116",
+                AnoPublicacao = 2018,
+                Sinopse = "Lily Bloom decide começar uma nova vida em Boston e abrir a própria floricultura. Quando conhece Ryle Kincaid, um neurocirurgião confiante, teimoso e talvez até um pouco arrogante, tudo parece perfeito.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/TZyFDwAAQBAJ?fife=w400-h600",
                 AutorId = autores[1].Id,
-                GeneroId = generos[2].Id
+                GeneroId = generos[0].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "O Cortiço",
-                ISBN = "978-8508040711",
-                AnoPublicacao = 1890,
-                Sinopse = "Romance naturalista que retrata a vida em um cortiço carioca, mostrando as mazelas sociais do Brasil do século XIX.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51VrYGuW+5L._SY445_SX342_.jpg",
+                Titulo = "Verity",
+                ISBN = "978-8501117793",
+                AnoPublicacao = 2021,
+                Sinopse = "Lowen Ashleigh é contratada para terminar os livros da famosa autora Verity Crawford. Ao revisar os manuscritos, ela encontra uma autobiografia secreta que revela segredos perturbadores.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/kQMTrgEACAAJ?fife=w400-h600",
+                AutorId = autores[1].Id,
+                GeneroId = generos[1].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Extraordinário",
+                ISBN = "978-8580573565",
+                AnoPublicacao = 2013,
+                Sinopse = "August Pullman é um menino de 10 anos que nasceu com uma deformidade facial. Pela primeira vez, ele vai frequentar uma escola regular e precisa se esforçar para conquistar seu espaço.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/0RqJDQAAQBAJ?fife=w400-h600",
                 AutorId = autores[2].Id,
-                GeneroId = generos[1].Id
+                GeneroId = generos[2].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Capitães da Areia",
-                ISBN = "978-8535914066",
-                AnoPublicacao = 1937,
-                Sinopse = "Romance que conta a história de um grupo de meninos de rua em Salvador, liderados por Pedro Bala.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51dQKGgFb7L._SY445_SX342_.jpg",
+                Titulo = "Torto Arado",
+                ISBN = "978-8551005675",
+                AnoPublicacao = 2019,
+                Sinopse = "Vencedor do Prêmio Jabuti, o romance narra a história de duas irmãs que vivem em uma fazenda no interior da Bahia, abordando temas como racismo, desigualdade e resistência.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/XBrXDwAAQBAJ?fife=w400-h600",
                 AutorId = autores[3].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "A Hora da Estrela",
-                ISBN = "978-8520925683",
-                AnoPublicacao = 1977,
-                Sinopse = "Último romance de Clarice Lispector, conta a história de Macabéa, uma nordestina que vive no Rio de Janeiro.",
-                CapaUrl = "https://m.media-amazon.com/images/I/41VnW8ZqVvL._SY445_SX342_.jpg",
-                AutorId = autores[4].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Vidas Secas",
-                ISBN = "978-8501012371",
-                AnoPublicacao = 1938,
-                Sinopse = "Romance que retrata a vida de uma família de retirantes no sertão nordestino durante a seca.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51xJZJv9pxL._SY445_SX342_.jpg",
-                AutorId = autores[5].Id,
                 GeneroId = generos[3].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "O Quinze",
-                ISBN = "978-8503012089",
-                AnoPublicacao = 1930,
-                Sinopse = "Romance que narra os efeitos da grande seca de 1915 no Ceará sobre a vida dos sertanejos.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51XqhXwN9pL._SY445_SX342_.jpg",
+                Titulo = "A Paciente Silenciosa",
+                ISBN = "978-8501116697",
+                AnoPublicacao = 2019,
+                Sinopse = "Alicia Berenson mata o marido com cinco tiros e nunca mais fala uma palavra. O psicoterapeuta Theo Faber está obcecado em descobrir o motivo do crime.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/hAl5DwAAQBAJ?fife=w400-h600",
+                AutorId = autores[4].Id,
+                GeneroId = generos[1].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Para Todos os Garotos Que Já Amei",
+                ISBN = "978-8580579062",
+                AnoPublicacao = 2014,
+                Sinopse = "Lara Jean guarda suas cartas de amor em uma caixa que sua mãe lhe deu. Quando as cartas são misteriosamente enviadas, sua vida amorosa sai do controle.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/975-BAAAQBAJ?fife=w400-h600",
+                AutorId = autores[5].Id,
+                GeneroId = generos[2].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "O Lado Bom da Vida",
+                ISBN = "978-8580571424",
+                AnoPublicacao = 2012,
+                Sinopse = "Pat Peoples está determinado a reconstruir sua vida e reconquistar sua ex-esposa. Mas quando conhece Tiffany, uma jovem com problemas próprios, sua vida toma um rumo inesperado.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/HMm7AAAAQBAJ?fife=w400-h600",
                 AutorId = autores[6].Id,
-                GeneroId = generos[3].Id
+                GeneroId = generos[0].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Macunaíma",
-                ISBN = "978-8503010917",
-                AnoPublicacao = 1928,
-                Sinopse = "Rapsódia que narra as aventuras do herói sem nenhum caráter, misturando elementos do folclore brasileiro.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51wHLqH5vOL._SY445_SX342_.jpg",
+                Titulo = "A Seleção",
+                ISBN = "978-8576862178",
+                AnoPublicacao = 2012,
+                Sinopse = "Para 35 garotas, a Seleção é a chance de uma vida. A oportunidade de escapar da vida que foi planejada para elas desde o nascimento e viver em um mundo de vestidos deslumbrantes e joias preciosas.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/bjUuDwAAQBAJ?fife=w400-h600",
                 AutorId = autores[7].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Iracema",
-                ISBN = "978-8508117468",
-                AnoPublicacao = 1865,
-                Sinopse = "Lenda do Ceará que narra o amor entre a índia Iracema e o português Martim.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51dBOUNE8eL._SY445_SX342_.jpg",
-                AutorId = autores[8].Id,
                 GeneroId = generos[4].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Triste Fim de Policarpo Quaresma",
-                ISBN = "978-8508117475",
-                AnoPublicacao = 1915,
-                Sinopse = "Romance que satiriza o nacionalismo exacerbado através da história de Policarpo Quaresma.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51Ks9EqU5LL._SY445_SX342_.jpg",
+                Titulo = "Bom Dia, Verônica",
+                ISBN = "978-8551002841",
+                AnoPublicacao = 2016,
+                Sinopse = "A delegada Verônica Torres investiga casos de violência doméstica em São Paulo. Quando uma mulher se suicida na delegacia, ela descobre uma rede de crimes muito maior.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/6WnPDQAAQBAJ?fife=w400-h600",
+                AutorId = autores[8].Id,
+                GeneroId = generos[1].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "O Milagre da Manhã",
+                ISBN = "978-8576849940",
+                AnoPublicacao = 2016,
+                Sinopse = "Hal Elrod mostra como acordar cedo e dedicar um tempo para o desenvolvimento pessoal pode transformar qualquer área da sua vida, antes das 8h da manhã.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/SkI5DwAAQBAJ?fife=w400-h600",
                 AutorId = autores[9].Id,
-                GeneroId = generos[1].Id
+                GeneroId = generos[5].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "O Tempo e o Vento - O Continente",
-                ISBN = "978-8535911350",
-                AnoPublicacao = 1949,
-                Sinopse = "Primeira parte da trilogia que narra 200 anos da história do Rio Grande do Sul através da família Terra Cambará.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51yzQjYPqBL._SY445_SX342_.jpg",
+                Titulo = "Pequeno Manual Antirracista",
+                ISBN = "978-8535932331",
+                AnoPublicacao = 2019,
+                Sinopse = "Djamila Ribeiro apresenta caminhos de reflexão para aqueles que desejam aprofundar sua percepção sobre discriminações racistas estruturais e assumir a responsabilidade pela transformação do estado das coisas.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/BIK7DwAAQBAJ?fife=w400-h600",
                 AutorId = autores[10].Id,
-                GeneroId = generos[2].Id
+                GeneroId = generos[6].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "Quincas Borba",
-                ISBN = "978-8535911688",
-                AnoPublicacao = 1891,
-                Sinopse = "Romance que narra a história de Rubião, herdeiro de Quincas Borba, e sua ascensão e queda social.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51cOVYbLiIL._SY445_SX342_.jpg",
-                AutorId = autores[0].Id,
-                GeneroId = generos[1].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "A Paixão Segundo G.H.",
-                ISBN = "978-8520936344",
-                AnoPublicacao = 1964,
-                Sinopse = "Romance introspectivo que narra a experiência existencial de G.H. após um encontro com uma barata.",
-                CapaUrl = "https://m.media-amazon.com/images/I/41lVx8WQFSL._SY445_SX342_.jpg",
-                AutorId = autores[4].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "São Bernardo",
-                ISBN = "978-8501012388",
-                AnoPublicacao = 1934,
-                Sinopse = "Romance que narra a história de Paulo Honório, fazendeiro que reconstrói a fazenda São Bernardo.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51xqRLJkqiL._SY445_SX342_.jpg",
-                AutorId = autores[5].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Gabriela, Cravo e Canela",
-                ISBN = "978-8535914073",
-                AnoPublicacao = 1958,
-                Sinopse = "Romance que narra a história de amor entre Nacib e Gabriela na cidade de Ilhéus nos anos 1920.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51YcKqhBOyL._SY445_SX342_.jpg",
-                AutorId = autores[3].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Romanceiro da Inconfidência",
-                ISBN = "978-8526020986",
-                AnoPublicacao = 1953,
-                Sinopse = "Obra poética que reconta os eventos da Inconfidência Mineira através de romances e canções.",
-                CapaUrl = "https://m.media-amazon.com/images/I/41S8gVQJYxL._SY445_SX342_.jpg",
+                Titulo = "Teto Para Dois",
+                ISBN = "978-8551005361",
+                AnoPublicacao = 2019,
+                Sinopse = "Tiffy e Leon dividem um apartamento, mas nunca se encontram. Ela usa a cama de dia, ele à noite. Mas quando começam a deixar bilhetes um para o outro, uma amizade inusitada floresce.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/h_2ODwAAQBAJ?fife=w400-h600",
                 AutorId = autores[11].Id,
-                GeneroId = generos[2].Id
+                GeneroId = generos[0].Id
             },
             new Livro
             {
                 Id = Guid.NewGuid(),
-                Titulo = "O Guarani",
-                ISBN = "978-8508117451",
-                AnoPublicacao = 1857,
-                Sinopse = "Romance indianista que narra a história de amor entre Peri e Ceci no Brasil colonial.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51hNQIcGOdL._SY445_SX342_.jpg",
-                AutorId = autores[8].Id,
-                GeneroId = generos[4].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Sagarana",
-                ISBN = "978-8520939031",
-                AnoPublicacao = 1946,
-                Sinopse = "Coletânea de nove contos que retratam o sertão mineiro com linguagem inovadora.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51nZJQqOJnL._SY445_SX342_.jpg",
-                AutorId = autores[1].Id,
-                GeneroId = generos[2].Id
-            },
-            new Livro
-            {
-                Id = Guid.NewGuid(),
-                Titulo = "Memorial de Aires",
-                ISBN = "978-8535911695",
-                AnoPublicacao = 1908,
-                Sinopse = "Último romance de Machado de Assis, narrado em forma de diário pelo conselheiro Aires.",
-                CapaUrl = "https://m.media-amazon.com/images/I/51Y0cZKNdOL._SY445_SX342_.jpg",
-                AutorId = autores[0].Id,
+                Titulo = "A Garota do Lago",
+                ISBN = "978-8594540942",
+                AnoPublicacao = 2017,
+                Sinopse = "Kelsey Castle desapareceu há um ano. Quando seu corpo é encontrado, a investigação revela segredos perturbadores sobre a jovem e sua família.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/Vv8uDwAAQBAJ?fife=w400-h600",
+                AutorId = autores[12].Id,
                 GeneroId = generos[1].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Ideias Para Adiar o Fim do Mundo",
+                ISBN = "978-8535932997",
+                AnoPublicacao = 2019,
+                Sinopse = "Ailton Krenak desenvolve uma crítica à civilização ocidental, propondo uma reflexão sobre nossa relação com a natureza e os povos indígenas.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/rsjADwAAQBAJ?fife=w400-h600",
+                AutorId = autores[13].Id,
+                GeneroId = generos[6].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "November 9",
+                ISBN = "978-8501115706",
+                AnoPublicacao = 2020,
+                Sinopse = "Fallon e Ben se conhecem no dia em que ela está se mudando de Los Angeles para Nova York. Eles decidem se encontrar no mesmo dia todos os anos. Mas será que o destino está do lado deles?",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/n8AqDwAAQBAJ?fife=w400-h600",
+                AutorId = autores[1].Id,
+                GeneroId = generos[0].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Quem Me Roubou de Mim?",
+                ISBN = "978-8542212129",
+                AnoPublicacao = 2018,
+                Sinopse = "Padre Fábio de Melo reflete sobre como nos perdemos de nós mesmos ao longo da vida e como podemos nos reencontrar.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/lMxaDwAAQBAJ?fife=w400-h600",
+                AutorId = autores[14].Id,
+                GeneroId = generos[5].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Mindset: A Nova Psicologia do Sucesso",
+                ISBN = "978-8547000240",
+                AnoPublicacao = 2017,
+                Sinopse = "Carol Dweck revela como o sucesso pode ser alcançado pela maneira como pensamos sobre nossos talentos e habilidades. Pessoas com mentalidade fixa acreditam que suas qualidades são imutáveis.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/fdjsz2VMyN4C?fife=w400-h600",
+                AutorId = autores[15].Id,
+                GeneroId = generos[6].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Fazendo Meu Filme 1",
+                ISBN = "978-8501080714",
+                AnoPublicacao = 2008,
+                Sinopse = "Fani tem 16 anos e vive uma montanha-russa de emoções típicas da adolescência. Ela registra tudo em seu blog, compartilhando suas aventuras, paixões e descobertas.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/8jUuDwAAQBAJ?fife=w400-h600",
+                AutorId = autores[16].Id,
+                GeneroId = generos[2].Id
+            },
+            new Livro
+            {
+                Id = Guid.NewGuid(),
+                Titulo = "Ansiedade: Como Enfrentar o Mal do Século",
+                ISBN = "978-8582852927",
+                AnoPublicacao = 2014,
+                Sinopse = "Augusto Cury apresenta técnicas para gerenciar a ansiedade e o estresse da vida moderna, baseadas em sua teoria da inteligência multifocal.",
+                CapaUrl = "https://books.google.com/books/publisher/content/images/frontcover/gLBfDwAAQBAJ?fife=w400-h600",
+                AutorId = autores[17].Id,
+                GeneroId = generos[5].Id
             }
         };
 
+        Console.WriteLine($"Adicionando {livros.Length} livros...");
         await context.Livros.AddRangeAsync(livros);
+        Console.WriteLine("Salvando livros no banco de dados...");
         await context.SaveChangesAsync();
-        Console.WriteLine($"{livros.Length} livros criados");
-        Console.WriteLine("Seed concluído com sucesso!");
+        Console.WriteLine($"✅ {livros.Length} livros criados com sucesso");
+        Console.WriteLine("✅ Seed concluído com sucesso!");
     }
 }

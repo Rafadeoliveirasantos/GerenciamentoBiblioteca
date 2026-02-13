@@ -1,91 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LivroService } from '../../../core/services/livro.service';
-import { AutorService } from '../../../core/services/autor.service';
-import { GeneroService } from '../../../core/services/genero.service';
 import { Livro } from '../../../core/models/livro.model';
-import { LivroFormComponent } from '../livro-form/livro-form.component';
-import { UploadCapaComponent } from '../../../shared/components/upload-capa/upload-capa.component';
 
 @Component({
   selector: 'app-livro-list',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    MatProgressSpinnerModule
+    MatIconModule
   ],
-  template: `
-    <div class="livros-container">
-      <div class="livros-header">
-        <h1 class="livros-titulo">Biblioteca de Livros</h1>
-        <button mat-raised-button class="btn-novo-livro" (click)="openForm()">
-          <mat-icon>add</mat-icon>
-          Novo Livro
-        </button>
-      </div>
-      
-      <div *ngIf="carregando" class="loading-container">
-        <mat-spinner diameter="60"></mat-spinner>
-        <p class="loading-text">Carregando livros...</p>
-      </div>
-      
-      <div class="livros-grid" *ngIf="!carregando">
-        <mat-card class="livro-card" *ngFor="let livro of listaLivros">
-          <div class="livro-capa-container">
-            <img *ngIf="livro.capaUrl" 
-                 [src]="livro.capaUrl" 
-                 [alt]="livro.titulo" 
-                 class="livro-capa"
-                 (error)="onImageError($event, livro)">
-            <div *ngIf="!livro.capaUrl || livro.semCapa" class="livro-capa-placeholder">
-              <svg class="book-icon" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
-              </svg>
-              <div class="placeholder-titulo">{{ livro.titulo }}</div>
-            </div>
-          </div>
-          
-          <div class="livro-info">
-            <h3 class="livro-titulo" [title]="livro.titulo">{{ livro.titulo }}</h3>
-            <p class="livro-autor">
-              <mat-icon class="info-icon">person</mat-icon>
-              {{ livro.autorNome }}
-            </p>
-            <p class="livro-genero">
-              <mat-icon class="info-icon">category</mat-icon>
-              {{ livro.generoNome }}
-            </p>
-            <p class="livro-ano">
-              <mat-icon class="info-icon">calendar_today</mat-icon>
-              {{ livro.anoPublicacao }}
-            </p>
-            <p class="livro-isbn">ISBN: {{ livro.isbn }}</p>
-          </div>
-          
-          <div class="livro-acoes">
-            <button mat-icon-button class="btn-acao btn-capa" (click)="openUpload(livro)" title="Alterar Capa">
-              <mat-icon>photo_camera</mat-icon>
-            </button>
-            <button mat-icon-button class="btn-acao btn-editar" (click)="openForm(livro)" title="Editar">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button class="btn-acao btn-excluir" (click)="delete(livro)" title="Excluir">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </mat-card>
-      </div>
-    </div>
-  `,
+  templateUrl: './livro-list.component.html',
   styles: [`
     .livros-container {
       min-height: 100vh;
@@ -383,79 +310,79 @@ import { UploadCapaComponent } from '../../../shared/components/upload-capa/uplo
 })
 export class LivroListComponent implements OnInit {
   listaLivros: Livro[] = [];
+  livrosFiltrados: Livro[] = [];
+  livros: Livro[] = [];
   carregando = false;
+  generoIdFiltro: string | null = null;
+  generoNomeFiltro: string | null = null;
 
   constructor(
     private livroService: LivroService,
-    private autorService: AutorService,
-    private generoService: GeneroService,
-    private dialog: MatDialog
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.carregarDados();
+    this.route.queryParams.subscribe((params: Params) => {
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('📥 QUERY PARAMS:', params);
+      this.generoIdFiltro = params['generoId'] || null;
+      this.generoNomeFiltro = params['generoNome'] || null;
+      console.log('🔍 Filtro:', this.generoIdFiltro, this.generoNomeFiltro);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      this.carregarDados();
+    });
   }
 
-  // Carrega lista de livros, autores e gêneros
   carregarDados(): void {
     this.carregando = true;
-    // Pré-carrega autores e gêneros pro dropdown
-    this.autorService.getAll().subscribe();
-    this.generoService.getAll().subscribe();
     
     this.livroService.getAll().subscribe({
-      next: (dados) => {
+      next: (dados: Livro[]) => {
         this.listaLivros = dados;
-        console.log('Livros carregados:', dados.length);
+        this.livros = dados;
+        console.log('📚 Total de livros:', dados.length);
+        this.aplicarFiltro();
         this.carregando = false;
       },
-      error: (erro) => {
-        console.log('Erro ao carregar livros:', erro);
+      error: (erro: any) => {
+        console.error('❌ Erro:', erro);
         this.carregando = false;
       }
     });
   }
 
-  openForm(livro?: Livro): void {
-    const dialogRef = this.dialog.open(LivroFormComponent, {
-      width: '600px',
-      data: livro
-    });
-
-    dialogRef.afterClosed().subscribe(resultado => {
-      if (resultado) {
-        this.carregarDados();
-      }
-    });
-  }
-
-  openUpload(livro: Livro): void {
-    const dialogRef = this.dialog.open(UploadCapaComponent, {
-      width: '500px',
-      data: livro
-    });
-
-    dialogRef.afterClosed().subscribe(resultado => {
-      if (resultado) {
-        // Recarrega a lista pra mostrar a nova capa
-        this.carregarDados();
-      }
-    });
-  }
-
-  // TODO: adicionar confirmação com modal do Material
-  delete(livro: Livro): void {
-    if (confirm(`Deseja realmente excluir o livro "${livro.titulo}"?`)) {
-      this.livroService.delete(livro.id).subscribe(() => {
-        console.log('Livro excluído:', livro.titulo);
-        this.carregarDados();
-      });
+  aplicarFiltro(): void {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🔍 APLICANDO FILTRO');
+    console.log('generoIdFiltro:', this.generoIdFiltro);
+    console.log('Total de livros:', this.listaLivros.length);
+    
+    if (this.generoIdFiltro) {
+      this.livrosFiltrados = this.listaLivros.filter(
+        livro => livro.generoId === this.generoIdFiltro
+      );
+      console.log('✅ FILTRADOS:', this.livrosFiltrados.length, 'livros');
+      console.log('Títulos filtrados:', this.livrosFiltrados.map(l => l.titulo));
+    } else {
+      this.livrosFiltrados = this.listaLivros;
+      console.log('⚪ SEM FILTRO - mostrando todos');
     }
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
-  onImageError(event: any, livro: Livro): void {
-    // Marca o livro como sem capa para mostrar o placeholder
-    livro.semCapa = true;
-    event.target.style.display = 'none';
+  limparFiltro(): void {
+    this.router.navigate(['/livros']);
+  }
+
+  getPlaceholderColor(index: number): string {
+    const cores = [
+      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    ];
+    return cores[index % cores.length];
   }
 }

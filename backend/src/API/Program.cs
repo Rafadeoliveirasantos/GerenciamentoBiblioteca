@@ -102,15 +102,54 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Aplica migrations e inicializa o banco de dados
-using (var scope = app.Services.CreateScope())
+var maxRetries = 10;
+var retryDelay = TimeSpan.FromSeconds(3);
+
+for (int i = 0; i < maxRetries; i++)
 {
-    var context = scope.ServiceProvider.GetRequiredService<BibliotecaDbContext>();
-    
-    // Aplica as migrations pendentes automaticamente
-    await context.Database.MigrateAsync();
-    
-    // Popula o banco com dados iniciais
-    await DbInitializer.Initialize(context);
+    try
+    {
+        Console.WriteLine($"Tentativa {i + 1}/{maxRetries} - Iniciando configuração do banco de dados...");
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<BibliotecaDbContext>();
+            
+            Console.WriteLine("Testando conexão com SQL Server...");
+            await context.Database.CanConnectAsync();
+            Console.WriteLine("✅ Conexão estabelecida!");
+            
+            Console.WriteLine("Aplicando migrations...");
+            await context.Database.MigrateAsync();
+            Console.WriteLine("✅ Migrations aplicadas com sucesso!");
+            
+            Console.WriteLine("Iniciando seed do banco...");
+            await DbInitializer.Initialize(context);
+            Console.WriteLine("✅ Banco de dados configurado com sucesso!");
+        }
+        
+        break; // Sucesso - sai do loop
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Erro na tentativa {i + 1}: {ex.Message}");
+        
+        if (i < maxRetries - 1)
+        {
+            Console.WriteLine($"Aguardando {retryDelay.TotalSeconds}s antes de tentar novamente...");
+            await Task.Delay(retryDelay);
+        }
+        else
+        {
+            Console.WriteLine("❌ FALHA CRÍTICA: Número máximo de tentativas excedido!");
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+            }
+            throw;
+        }
+    }
 }
 
 app.UseSwagger();

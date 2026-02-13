@@ -1,0 +1,41 @@
+<div class="app-container" *ngIf="mostrarNavbar">
+  <mat-toolbar color="primary" class="navbar">
+    <div class="navbar-content">
+      <!-- Logo -->
+      <div class="logo" routerLink="/livros">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">Biblioteca</span>
+        <span class="logo-badge">Digital</span>
+      </div>
+
+      <!-- Menu -->
+      <nav class="nav-menu">
+        <button mat-button routerLink="/livros" routerLinkActive="active">
+          <mat-icon>book</mat-icon>
+          <span>Livros</span>
+        </button>
+        
+        <button mat-button routerLink="/autores" routerLinkActive="active">
+          <mat-icon>person</mat-icon>
+          <span>Autores</span>
+        </button>
+        
+        <button mat-button routerLink="/generos" routerLinkActive="active">
+          <mat-icon>category</mat-icon>
+          <span>Gêneros</span>
+        </button>
+        
+        <button mat-button (click)="logout()" class="btn-logout">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </button>
+      </nav>
+    </div>
+  </mat-toolbar>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<router-outlet *ngIf="!mostrarNavbar"></router-outlet>
