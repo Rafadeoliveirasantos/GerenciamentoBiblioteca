@@ -7,7 +7,7 @@ Sistema completo de gerenciamento de biblioteca desenvolvido com .NET 8 (backend
 ### Backend
 - .NET 8
 - Entity Framework Core
-- **PostgreSQL 16** ✅
+- SQL Server 2022
 - JWT Authentication
 - Swagger/OpenAPI
 - FluentValidation
