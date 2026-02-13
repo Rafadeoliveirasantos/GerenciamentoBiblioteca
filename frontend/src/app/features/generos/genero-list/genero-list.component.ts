@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { GeneroService } from '../../../core/services/genero.service';
 import { Genero } from '../../../core/models/genero.model';
+import { GeneroFormComponent } from '../genero-form/genero-form.component';
 
 @Component({
   selector: 'app-genero-list',
@@ -11,7 +13,12 @@ import { Genero } from '../../../core/models/genero.model';
   template: `
     <div class="generos-container">
       <div class="header">
-        <h1>🏷️ Gêneros Literários</h1>
+        <div class="header-top">
+          <h1>🏷️ Gêneros Literários</h1>
+          <button class="btn-novo" (click)="novoGenero()">
+            ➕ Novo Gênero
+          </button>
+        </div>
         <p class="subtitle">Explore nossa coleção por categoria</p>
       </div>
 
@@ -27,6 +34,14 @@ import { Genero } from '../../../core/models/genero.model';
           <div class="genero-icon">{{ getIcon(genero.nome) }}</div>
           <h3>{{ genero.nome }}</h3>
           <p class="descricao" *ngIf="genero.descricao">{{ genero.descricao }}</p>
+          <div class="genero-acoes">
+            <button class="btn btn-editar" (click)="editarGenero(genero); $event.stopPropagation()">
+              ✏️ Editar
+            </button>
+            <button class="btn btn-deletar" (click)="deletarGenero(genero.id); $event.stopPropagation()">
+              🗑️ Deletar
+            </button>
+          </div>
           <div class="genero-shine"></div>
         </div>
       </div>
@@ -49,6 +64,33 @@ import { Genero } from '../../../core/models/genero.model';
       text-align: center;
       margin-bottom: 48px;
       color: white;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-novo {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-novo:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .header h1 {
@@ -155,6 +197,45 @@ import { Genero } from '../../../core/models/genero.model';
       transition: opacity 0.4s;
     }
 
+    .genero-acoes {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn-editar {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-editar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-deletar {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .btn-deletar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    }
+
     .empty-state {
       text-align: center;
       padding: 100px 20px;
@@ -179,7 +260,8 @@ export class GeneroListComponent implements OnInit {
 
   constructor(
     private generoService: GeneroService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -203,6 +285,35 @@ export class GeneroListComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  novoGenero(): void {
+    const dialogRef = this.dialog.open(GeneroFormComponent, {
+      width: '500px',
+      data: null
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.carregarGeneros();
+    });
+  }
+
+  editarGenero(genero: Genero): void {
+    const dialogRef = this.dialog.open(GeneroFormComponent, {
+      width: '500px',
+      data: genero
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.carregarGeneros();
+    });
+  }
+
+  deletarGenero(id: string): void {
+    if (confirm('Deseja realmente deletar este gênero?')) {
+      this.generoService.delete(id).subscribe({
+        next: () => this.carregarGeneros(),
+        error: (erro: any) => alert(erro.error?.message || 'Erro ao deletar gênero')
+      });
+    }
   }
 
   getIcon(generoNome: string): string {

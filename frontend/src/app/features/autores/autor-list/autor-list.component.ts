@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AutorService } from '../../../core/services/autor.service';
 import { Autor } from '../../../core/models/autor.model';
+import { AutorFormComponent } from '../autor-form/autor-form.component';
 
 @Component({
   selector: 'app-autor-list',
@@ -11,7 +13,12 @@ import { Autor } from '../../../core/models/autor.model';
   template: `
     <div class="autores-container">
       <div class="header">
-        <h1>✍️ Autores</h1>
+        <div class="header-top">
+          <h1>✍️ Autores</h1>
+          <button class="btn-novo" (click)="novoAutor()">
+            ➕ Novo Autor
+          </button>
+        </div>
         <p class="subtitle">Conheça os autores da nossa biblioteca</p>
       </div>
 
@@ -32,6 +39,14 @@ import { Autor } from '../../../core/models/autor.model';
               <span class="icon">📅</span>
               {{ autor.dataNascimento | date:'dd/MM/yyyy' }}
             </p>
+            <div class="autor-acoes">
+              <button class="btn btn-editar" (click)="editarAutor(autor); $event.stopPropagation()">
+                ✏️ Editar
+              </button>
+              <button class="btn btn-deletar" (click)="deletarAutor(autor.id); $event.stopPropagation()">
+                🗑️ Deletar
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -53,6 +68,33 @@ import { Autor } from '../../../core/models/autor.model';
     .header {
       text-align: center;
       margin-bottom: 48px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-novo {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-novo:hover {
+      background: linear-gradient(135deg, #45a049, #388E3C);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
     }
 
     .header h1 {
@@ -161,6 +203,42 @@ import { Autor } from '../../../core/models/autor.model';
       font-size: 14px;
     }
 
+    .autor-acoes {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-editar {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    .btn-editar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-deletar {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .btn-deletar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    }
+
     .empty-state {
       text-align: center;
       padding: 100px 20px;
@@ -188,7 +266,8 @@ export class AutorListComponent implements OnInit {
 
   constructor(
     private autorService: AutorService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -212,6 +291,35 @@ export class AutorListComponent implements OnInit {
 
   getCorAvatar(index: number): string {
     return this.cores[index % this.cores.length];
+  }
+
+  novoAutor(): void {
+    const dialogRef = this.dialog.open(AutorFormComponent, {
+      width: '500px',
+      data: null
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.carregarAutores();
+    });
+  }
+
+  editarAutor(autor: Autor): void {
+    const dialogRef = this.dialog.open(AutorFormComponent, {
+      width: '500px',
+      data: autor
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) this.carregarAutores();
+    });
+  }
+
+  deletarAutor(id: string): void {
+    if (confirm('Deseja realmente deletar este autor?')) {
+      this.autorService.delete(id).subscribe({
+        next: () => this.carregarAutores(),
+        error: (erro: any) => alert(erro.error?.message || 'Erro ao deletar autor')
+      });
+    }
   }
 
   filtrarPorAutor(autor: Autor): void {

@@ -31,7 +31,7 @@ public class LivroServiceTests
     [Fact]
     public async Task CreateAsync_ThrowsException_WhenAutorNotExists()
     {
-        var dto = new LivroDto
+        var dto = new CriarLivroDto
         {
             Titulo = "Teste",
             ISBN = "123",
@@ -48,7 +48,7 @@ public class LivroServiceTests
     [Fact]
     public async Task CreateAsync_ThrowsException_WhenISBNExists()
     {
-        var dto = new LivroDto
+        var dto = new CriarLivroDto
         {
             Titulo = "Teste",
             ISBN = "123",

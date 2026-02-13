@@ -37,7 +37,7 @@ public class GeneroServiceTests
     [Fact]
     public async Task CreateAsync_CreatesGenero()
     {
-        var dto = new GeneroDto { Nome = "Terror", Descricao = "Livros de terror" };
+        var dto = new CriarGeneroDto { Nome = "Terror", Descricao = "Livros de terror" };
         var genero = new Genero { Id = Guid.NewGuid(), Nome = dto.Nome, Descricao = dto.Descricao };
 
         _repositoryMock.Setup(r => r.CreateAsync(It.IsAny<Genero>())).ReturnsAsync(genero);
