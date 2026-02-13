@@ -36,7 +36,7 @@ public class GenerosController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] GeneroDto dto)
+    public async Task<IActionResult> Create([FromBody] CriarGeneroDto dto)
     {
         try
         {
@@ -50,7 +50,7 @@ public class GenerosController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] GeneroDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] AtualizarGeneroDto dto)
     {
         try
         {

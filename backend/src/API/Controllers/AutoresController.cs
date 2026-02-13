@@ -36,7 +36,7 @@ public class AutoresController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] AutorDto dto)
+    public async Task<IActionResult> Create([FromBody] CriarAutorDto dto)
     {
         try
         {
@@ -50,7 +50,7 @@ public class AutoresController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] AutorDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] AtualizarAutorDto dto)
     {
         try
         {

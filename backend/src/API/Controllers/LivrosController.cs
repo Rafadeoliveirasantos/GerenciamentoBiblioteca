@@ -36,7 +36,7 @@ public class LivrosController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] LivroDto dto)
+    public async Task<IActionResult> Create([FromBody] CriarLivroDto dto)
     {
         try
         {
@@ -50,7 +50,7 @@ public class LivrosController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] LivroDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] AtualizarLivroDto dto)
     {
         try
         {

@@ -26,7 +26,7 @@ public class GeneroService
         return genero != null ? MapToViewModel(genero) : null;
     }
 
-    public async Task<GeneroViewModel> CreateAsync(GeneroDto dto)
+    public async Task<GeneroViewModel> CreateAsync(CriarGeneroDto dto)
     {
         var genero = new Genero
         {
@@ -39,7 +39,7 @@ public class GeneroService
         return MapToViewModel(created);
     }
 
-    public async Task<GeneroViewModel?> UpdateAsync(Guid id, GeneroDto dto)
+    public async Task<GeneroViewModel?> UpdateAsync(Guid id, AtualizarGeneroDto dto)
     {
         var genero = await _repository.GetByIdAsync(id);
         if (genero == null) return null;

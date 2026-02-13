@@ -38,7 +38,7 @@ public class LivroService
         return livroEncontrado != null ? MapToViewModel(livroEncontrado) : null;
     }
 
-    public async Task<LivroViewModel> CreateAsync(LivroDto dto)
+    public async Task<LivroViewModel> CreateAsync(CriarLivroDto dto)
     {
         // Valida se o autor existe antes de criar o livro
         var autorExiste = await _autorRepository.ExistsAsync(dto.AutorId);
@@ -69,7 +69,7 @@ public class LivroService
         return MapToViewModel(criado);
     }
 
-    public async Task<LivroViewModel?> UpdateAsync(Guid id, LivroDto dto)
+    public async Task<LivroViewModel?> UpdateAsync(Guid id, AtualizarLivroDto dto)
     {
         // Busca o livro no banco antes de atualizar
         var livroExistente = await _livroRepository.GetByIdAsync(id);

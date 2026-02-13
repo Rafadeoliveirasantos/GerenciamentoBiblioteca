@@ -16,7 +16,6 @@ public class AutorDtoValidator : AbstractValidator<AutorDto>
             .When(x => !string.IsNullOrEmpty(x.Biografia));
 
         RuleFor(x => x.DataNascimento)
-            .LessThan(DateTime.Now).WithMessage("Data de nascimento deve ser no passado")
-            .When(x => x.DataNascimento.HasValue);
+            .LessThan(DateTime.Now).WithMessage("Data de nascimento deve ser no passado");
     }
 }

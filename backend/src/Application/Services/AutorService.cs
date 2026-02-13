@@ -26,7 +26,7 @@ public class AutorService
         return autor != null ? MapToViewModel(autor) : null;
     }
 
-    public async Task<AutorViewModel> CreateAsync(AutorDto dto)
+    public async Task<AutorViewModel> CreateAsync(CriarAutorDto dto)
     {
         var autor = new Autor
         {
@@ -40,7 +40,7 @@ public class AutorService
         return MapToViewModel(created);
     }
 
-    public async Task<AutorViewModel?> UpdateAsync(Guid id, AutorDto dto)
+    public async Task<AutorViewModel?> UpdateAsync(Guid id, AtualizarAutorDto dto)
     {
         var autor = await _repository.GetByIdAsync(id);
         if (autor == null) return null;
