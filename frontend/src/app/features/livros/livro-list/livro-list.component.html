@@ -49,12 +49,12 @@
   <!-- LIVROS FILTRADOS -->
   <div *ngIf="!carregando && livrosFiltrados.length > 0" class="livros-grid">
     <div class="livro-card" *ngFor="let livro of livrosFiltrados; let i = index">
-      <div class="capa-container">
+      <div class="livro-capa-container">
         <img
           *ngIf="livro.capaUrl"
           [src]="livro.capaUrl"
           [alt]="livro.titulo"
-          class="capa"
+          class="livro-capa"
         >
         <div
           *ngIf="!livro.capaUrl"
