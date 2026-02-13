@@ -1,7 +1,12 @@
 <div class="livros-container">
   <!-- Header -->
   <div class="header">
-    <h1>📚 Biblioteca de Livros</h1>
+    <div class="header-top">
+      <h1>📚 Biblioteca de Livros</h1>
+      <button class="btn-novo-livro" (click)="novoLivro()">
+        ➕ Novo Livro
+      </button>
+    </div>
 
     <!-- SEM FILTRO -->
     <p class="subtitle" *ngIf="!generoNomeFiltro">

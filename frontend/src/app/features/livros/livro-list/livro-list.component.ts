@@ -32,6 +32,33 @@ import { LivroFormComponent } from '../livro-form/livro-form.component';
       margin: 0 auto 48px;
     }
 
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-novo-livro {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-novo-livro:hover {
+      background: linear-gradient(135deg, #45a049, #388E3C);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
     .header h1 {
       font-size: 42px;
       font-weight: 800;
@@ -554,6 +581,19 @@ export class LivroListComponent implements OnInit {
     this.autorIdFiltro = null;
     this.autorNomeFiltro = null;
     this.router.navigate(['/livros']);
+  }
+
+  novoLivro(): void {
+    const dialogRef = this.dialog.open(LivroFormComponent, {
+      width: '500px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.carregarDados();
+      }
+    });
   }
 
   editarLivro(livro: Livro): void {

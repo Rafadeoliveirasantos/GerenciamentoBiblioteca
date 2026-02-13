@@ -32,7 +32,7 @@ Sistema completo de gerenciamento de biblioteca desenvolvido com .NET 8 (backend
 - **Gerenciamento de Livros**: CRUD completo com relacionamentos
 - **Upload de Capas**: Upload, visualização e remoção de imagens de capa
 - **Autenticação JWT**: Login seguro com token de 8 horas
-- **Seed Data**: 20 livros brasileiros clássicos pré-cadastrados
+- **Seed Data**: 20 best-sellers modernos pré-cadastrados com capas
 
 ## 🎯 Regras de Negócio
 
@@ -127,39 +127,39 @@ npm start
 
 ## 📖 Livros Pré-cadastrados
 
-O sistema vem com 20 livros brasileiros clássicos:
+O sistema vem com 20 best-sellers modernos pré-cadastrados automaticamente (seed):
 
-1. Dom Casmurro - Machado de Assis
-2. Memórias Póstumas de Brás Cubas - Machado de Assis
-3. Grande Sertão: Veredas - Guimarães Rosa
-4. O Cortiço - Aluísio Azevedo
-5. Capitães da Areia - Jorge Amado
-6. A Hora da Estrela - Clarice Lispector
-7. Vidas Secas - Graciliano Ramos
-8. O Quinze - Rachel de Queiroz
-9. Macunaíma - Mário de Andrade
-10. Iracema - José de Alencar
-11. Triste Fim de Policarpo Quaresma - Lima Barreto
-12. O Tempo e o Vento - Érico Veríssimo
-13. Quincas Borba - Machado de Assis
-14. A Paixão Segundo G.H. - Clarice Lispector
-15. São Bernardo - Graciliano Ramos
-16. Gabriela, Cravo e Canela - Jorge Amado
-17. Romanceiro da Inconfidência - Cecília Meireles
-18. O Guarani - José de Alencar
-19. Sagarana - Guimarães Rosa
-20. Memorial de Aires - Machado de Assis
+1. A Culpa é das Estrelas - John Green (Romance)
+2. É Assim Que Acaba - Colleen Hoover (Romance)
+3. Verity - Colleen Hoover (Suspense)
+4. Extraordinário - R.J. Palacio (Juvenil)
+5. Torto Arado - Itamar Vieira Junior (Literatura Brasileira)
+6. A Paciente Silenciosa - Alex Michaelides (Suspense)
+7. Para Todos os Garotos Que Já Amei - Jenny Han (Juvenil)
+8. O Lado Bom da Vida - Matthew Quick (Romance)
+9. A Seleção - Kiera Cass (Fantasia)
+10. Bom Dia, Verônica - Raphael Montes (Suspense)
+11. O Milagre da Manhã - Hal Elrod (Autoajuda)
+12. Pequeno Manual Antirracista - Djamila Ribeiro (Não-ficção)
+13. Teto Para Dois - Beth O'Leary (Romance)
+14. A Garota do Lago - Charlie Donlea (Suspense)
+15. Ideias Para Adiar o Fim do Mundo - Ailton Krenak (Não-ficção)
+16. November 9 - Colleen Hoover (Romance)
+17. Quem Me Roubou de Mim? - Padre Fábio de Melo (Autoajuda)
+18. Mindset: A Nova Psicologia do Sucesso - Carol S. Dweck (Não-ficção)
+19. Fazendo Meu Filme 1 - Paula Pimenta (Juvenil)
+20. Ansiedade: Como Enfrentar o Mal do Século - Augusto Cury (Autoajuda)
 
-Todos com capas reais de URLs externas.
+Todos com capas reais via Google Books (URLs externas).
 
-## 🧪 Testar Upload de Capa
+## 🧪 Como Usar
 
 1. Fazer login com `admin` / `Admin@123`
-2. Navegar para "Livros"
-3. Clicar no ícone de câmera em qualquer livro
-4. Arrastar uma imagem ou clicar para selecionar
-5. Clicar em "Upload"
-6. A capa será atualizada imediatamente
+2. Navegar para "Livros", "Autores" ou "Gêneros"
+3. Para **criar**: clicar no botão "➕ Novo Livro" (ou equivalente)
+4. Para **editar**: clicar no botão "✏️ Editar" no card do livro
+5. Para **upload de capa**: clicar no botão "📷 Foto" e selecionar uma imagem
+6. Para **deletar**: clicar no botão "🗑️ Deletar" e confirmar
 
 ## 🧪 Executar Testes
 

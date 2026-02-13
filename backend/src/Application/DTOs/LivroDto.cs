@@ -23,7 +23,6 @@ public class CriarLivroDto
     [StringLength(2000, ErrorMessage = "A sinopse deve ter no máximo 2000 caracteres")]
     public string? Sinopse { get; set; }
 
-    [Url(ErrorMessage = "URL da capa inválida")]
     public string? CapaUrl { get; set; }
 }
 
@@ -48,7 +47,6 @@ public class AtualizarLivroDto
     [StringLength(2000, ErrorMessage = "A sinopse deve ter no máximo 2000 caracteres")]
     public string? Sinopse { get; set; }
 
-    [Url(ErrorMessage = "URL da capa inválida")]
     public string? CapaUrl { get; set; }
 }
 
