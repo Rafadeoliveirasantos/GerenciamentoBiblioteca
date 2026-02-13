@@ -58,16 +58,28 @@
         >
         <div
           *ngIf="!livro.capaUrl"
-          class="placeholder"
-          [style.background]="getPlaceholderColor(i)"
+          class="livro-capa-placeholder"
+          [style.background]="getPlaceholderColorByGenero(livro.generoNome)"
         >
-          <span class="placeholder-icon">📚</span>
+          <span class="placeholder-icon">{{ getPlaceholderIconByGenero(livro.generoNome) }}</span>
+          <span class="placeholder-genero">{{ livro.generoNome }}</span>
         </div>
       </div>
       <div class="livro-info">
         <h3>{{ livro.titulo }}</h3>
         <p class="livro-autor">{{ livro.autorNome }}</p>
         <p class="livro-genero">{{ livro.generoNome }}</p>
+      </div>
+      <div class="livro-acoes">
+        <button class="btn btn-editar" (click)="editarLivro(livro)" title="Editar livro">
+          ✏️ Editar
+        </button>
+        <button class="btn btn-upload" (click)="uploadCapa(livro)" title="Upload de capa">
+          📷 Foto
+        </button>
+        <button class="btn btn-deletar" (click)="deletarLivro(livro.id)" title="Deletar livro">
+          🗑️ Deletar
+        </button>
       </div>
     </div>
   </div>
