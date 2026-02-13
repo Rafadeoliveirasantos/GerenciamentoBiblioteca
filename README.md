@@ -7,18 +7,18 @@ Sistema completo de gerenciamento de biblioteca desenvolvido com .NET 8 (backend
 ### Backend
 - .NET 8
 - Entity Framework Core
-- SQL Server
+- **PostgreSQL 16** ✅
 - JWT Authentication
 - Swagger/OpenAPI
 - FluentValidation
-- xUnit
+- xUnit + Moq
 
 ### Frontend
 - Angular 18
 - TypeScript
 - RxJS
 - Angular Material (paleta Azure)
-- Karma/Jasmine
+- Jasmine/Karma
 
 ### DevOps
 - Docker
@@ -166,14 +166,31 @@ Todos com capas reais via Google Books (URLs externas).
 ### Backend
 ```bash
 cd backend/tests/Application.Tests
+
+# Executar testes
 dotnet test
+
+# Com cobertura
+dotnet test --collect:"XPlat Code Coverage"
 ```
+
+**Cobertura Atual:**
+- ✅ **27 testes** - 100% passando
+- ✅ **65.4%** de cobertura de linhas
+- ✅ **60.9%** de cobertura de branches  
+- ✅ **74.3%** de cobertura de métodos
 
 ### Frontend
 ```bash
 cd frontend
+
+# Executar testes
 npm test
 ```
+
+**Cobertura Atual:**
+- ✅ **27 testes** - 100% passando
+- ✅ Todos os serviços cobertos
 
 ## 📁 Estrutura do Projeto
 
@@ -202,6 +219,15 @@ GerenciamentoBiblioteca/
 └── README.md
 ```
 
+## 🏗️ Arquitetura
+
+**DDD (Domain-Driven Design)** com separação de responsabilidades:
+
+- **Domain:** Entidades e lógica de negócio pura
+- **Application:** Use cases, DTOs, validações
+- **Infrastructure:** Persistência, serviços externos
+- **API:** Controllers, autenticação, middlewares
+
 ## 🔒 Segurança
 
 - JWT com expiração de 8 horas
@@ -225,4 +251,10 @@ Este projeto é um exemplo educacional.
 
 ## 👤 Autor
 
-Rafael de Oliveira Santos
+Rafael de Oliveira Santos  
+https://github.com/Rafadeoliveirasantos
+
+---
+
+**Projeto desenvolvido para o desafio técnico Siemens**  
+**Data de entrega:** 13/02/2026
