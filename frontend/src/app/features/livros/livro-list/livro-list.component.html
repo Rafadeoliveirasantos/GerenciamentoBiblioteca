@@ -8,18 +8,37 @@
       Explore nossa coleção completa
     </p>
 
-    <!-- COM FILTRO -->
-    <div class="filtro-ativo" *ngIf="generoNomeFiltro">
-      <div class="filtro-badge">
-        <mat-icon>filter_list</mat-icon>
-        <span>Mostrando livros de: <strong>{{ generoNomeFiltro }}</strong></span>
-      </div>
-      <button mat-raised-button color="warn" (click)="limparFiltro()">
-        <mat-icon>close</mat-icon>
-        Limpar filtro
-      </button>
-    </div>
+    <!-- FILTRO POR GÊNERO -->
+<div class="filtro-ativo" *ngIf="generoNomeFiltro">
+  <div class="filtro-badge">
+    <mat-icon>filter_list</mat-icon>
+    <span>Mostrando livros de: <strong>{{ generoNomeFiltro }}</strong></span>
   </div>
+  <button 
+    mat-raised-button 
+    color="warn" 
+    (click)="limparFiltro()"
+    style="background: linear-gradient(135deg, #7c3aed, #6366f1) !important; color: white !important; border-radius: 8px !important; padding: 10px 20px !important; font-weight: 600 !important; box-shadow: 0 2px 8px rgba(99,102,241,0.3) !important;">
+    <mat-icon style="color: white !important;">close</mat-icon>
+    Limpar filtro
+  </button>
+</div>
+
+<!-- FILTRO POR AUTOR -->
+<div class="filtro-ativo" *ngIf="autorNomeFiltro">
+  <div class="filtro-badge">
+    <mat-icon>person</mat-icon>
+    <span>Mostrando livros de: <strong>{{ autorNomeFiltro }}</strong></span>
+  </div>
+  <button 
+    mat-raised-button 
+    color="warn" 
+    (click)="limparFiltro()"
+    style="background: linear-gradient(135deg, #7c3aed, #6366f1) !important; color: white !important; border-radius: 8px !important; padding: 10px 20px !important; font-weight: 600 !important; box-shadow: 0 2px 8px rgba(99,102,241,0.3) !important;">
+    <mat-icon style="color: white !important;">close</mat-icon>
+    Limpar filtro
+  </button>
+</div>
 
   <!-- Loading -->
   <div *ngIf="carregando" class="loading">

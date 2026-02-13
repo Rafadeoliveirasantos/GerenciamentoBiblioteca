@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AutorService } from '../../../core/services/autor.service';
 import { Autor } from '../../../core/models/autor.model';
 
@@ -20,7 +21,7 @@ import { Autor } from '../../../core/models/autor.model';
       </div>
 
       <div *ngIf="!loading" class="autores-grid">
-        <div class="autor-card" *ngFor="let autor of autores; let i = index">
+        <div class="autor-card" *ngFor="let autor of autores; let i = index" (click)="filtrarPorAutor(autor)" style="cursor: pointer;">
           <div class="autor-avatar" [style.background]="getCorAvatar(i)">
             {{ autor.nome.charAt(0) }}
           </div>
@@ -185,7 +186,10 @@ export class AutorListComponent implements OnInit {
     'linear-gradient(135deg, #ff6e7f 0%, #bfe9ff 100%)'
   ];
 
-  constructor(private autorService: AutorService) {}
+  constructor(
+    private autorService: AutorService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.carregarAutores();
@@ -208,5 +212,22 @@ export class AutorListComponent implements OnInit {
 
   getCorAvatar(index: number): string {
     return this.cores[index % this.cores.length];
+  }
+
+  filtrarPorAutor(autor: Autor): void {
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🔍 FILTRAR POR AUTOR');
+    console.log('Autor selecionado:', autor.nome);
+    console.log('ID do autor:', autor.id);
+    
+    this.router.navigate(['/livros'], {
+      queryParams: {
+        autorId: autor.id,
+        autorNome: autor.nome
+      }
+    });
+    
+    console.log('✅ Navegação executada para /livros');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { LivroService } from '../../../core/services/livro.service';
 import { Livro } from '../../../core/models/livro.model';
 
@@ -10,7 +11,8 @@ import { Livro } from '../../../core/models/livro.model';
   standalone: true,
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './livro-list.component.html',
   styles: [`
@@ -18,6 +20,107 @@ import { Livro } from '../../../core/models/livro.model';
       min-height: 100vh;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 1400px;
+      margin: 0 auto 48px;
+    }
+
+    .header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    .filtro-ativo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+      border-radius: 12px;
+      border: 2px solid #fecaca;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .filtro-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filtro-badge mat-icon {
+      color: #dc2626;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .filtro-badge span {
+      font-size: 15px;
+      color: #374151;
+    }
+
+    .filtro-badge strong {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    button[mat-raised-button] {
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%) !important;
+      color: white !important;
+      border: none !important;
+      padding: 10px 20px !important;
+      border-radius: 8px !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+      transition: all 0.3s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      text-transform: none !important;
+      letter-spacing: 0 !important;
+    }
+
+    button[mat-raised-button]:hover {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
+    }
+
+    button[mat-raised-button] mat-icon {
+      font-size: 18px !important;
+      width: 18px !important;
+      height: 18px !important;
+      color: white !important;
     }
 
     .livros-header {
@@ -315,6 +418,8 @@ export class LivroListComponent implements OnInit {
   carregando = false;
   generoIdFiltro: string | null = null;
   generoNomeFiltro: string | null = null;
+  autorIdFiltro: string | null = null;
+  autorNomeFiltro: string | null = null;
 
   constructor(
     private livroService: LivroService,
@@ -328,7 +433,10 @@ export class LivroListComponent implements OnInit {
       console.log('📥 QUERY PARAMS:', params);
       this.generoIdFiltro = params['generoId'] || null;
       this.generoNomeFiltro = params['generoNome'] || null;
-      console.log('🔍 Filtro:', this.generoIdFiltro, this.generoNomeFiltro);
+      this.autorIdFiltro = params['autorId'] || null;
+      this.autorNomeFiltro = params['autorNome'] || null;
+      console.log('🔍 Filtro Gênero:', this.generoIdFiltro, this.generoNomeFiltro);
+      console.log('🔍 Filtro Autor:', this.autorIdFiltro, this.autorNomeFiltro);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       this.carregarDados();
     });
@@ -356,13 +464,20 @@ export class LivroListComponent implements OnInit {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('🔍 APLICANDO FILTRO');
     console.log('generoIdFiltro:', this.generoIdFiltro);
+    console.log('autorIdFiltro:', this.autorIdFiltro);
     console.log('Total de livros:', this.listaLivros.length);
     
     if (this.generoIdFiltro) {
       this.livrosFiltrados = this.listaLivros.filter(
         livro => livro.generoId === this.generoIdFiltro
       );
-      console.log('✅ FILTRADOS:', this.livrosFiltrados.length, 'livros');
+      console.log('✅ FILTRADOS POR GÊNERO:', this.livrosFiltrados.length, 'livros');
+      console.log('Títulos filtrados:', this.livrosFiltrados.map(l => l.titulo));
+    } else if (this.autorIdFiltro) {
+      this.livrosFiltrados = this.listaLivros.filter(
+        livro => livro.autorId === this.autorIdFiltro
+      );
+      console.log('✅ FILTRADOS POR AUTOR:', this.livrosFiltrados.length, 'livros');
       console.log('Títulos filtrados:', this.livrosFiltrados.map(l => l.titulo));
     } else {
       this.livrosFiltrados = this.listaLivros;
@@ -372,6 +487,10 @@ export class LivroListComponent implements OnInit {
   }
 
   limparFiltro(): void {
+    this.generoIdFiltro = null;
+    this.generoNomeFiltro = null;
+    this.autorIdFiltro = null;
+    this.autorNomeFiltro = null;
     this.router.navigate(['/livros']);
   }
 
