@@ -1,0 +1,48 @@
+Summary
+  Generated on: 13/02/2026 - 13:57:11
+  Coverage date: 13/02/2026 - 13:56:58
+  Parser: Cobertura
+  Assemblies: 2
+  Classes: 24
+  Files: 18
+  Line coverage: 65.4%
+  Covered lines: 229
+  Uncovered lines: 121
+  Coverable lines: 350
+  Total lines: 648
+  Branch coverage: 60.9% (39 of 64)
+  Covered branches: 39
+  Total branches: 64
+  Method coverage: 74.3% (81 of 109)
+  Full method coverage: 73.3% (80 of 109)
+  Covered methods: 81
+  Fully covered methods: 80
+  Total methods: 109
+
+Application                                   63.4%
+  Application.DTOs.AtualizarAutorDto           100%
+  Application.DTOs.AtualizarGeneroDto          100%
+  Application.DTOs.AtualizarLivroDto           100%
+  Application.DTOs.AutorDto                      0%
+  Application.DTOs.CriarAutorDto               100%
+  Application.DTOs.CriarGeneroDto              100%
+  Application.DTOs.CriarLivroDto               100%
+  Application.DTOs.GeneroDto                     0%
+  Application.DTOs.LivroDto                      0%
+  Application.Services.AuthService               0%
+  Application.Services.AutorService            100%
+  Application.Services.GeneroService           100%
+  Application.Services.LivroService           70.9%
+  Application.Validators.AutorDtoValidator       0%
+  Application.Validators.GeneroDtoValidator      0%
+  Application.Validators.LivroDtoValidator       0%
+  Application.ViewModels.AutorViewModel        100%
+  Application.ViewModels.GeneroViewModel       100%
+  Application.ViewModels.LivroViewModel        100%
+  Application.ViewModels.LoginViewModel          0%
+  Application.ViewModels.TokenViewModel          0%
+
+Domain                                         100%
+  Domain.Entities.Autor                        100%
+  Domain.Entities.Genero                       100%
+  Domain.Entities.Livro                        100%

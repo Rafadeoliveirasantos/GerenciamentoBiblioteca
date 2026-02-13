@@ -18,3 +18,4 @@ uploads/*
 !uploads/capas/
 uploads/capas/*
 !uploads/capas/.gitkeep
+frontend/.angular/

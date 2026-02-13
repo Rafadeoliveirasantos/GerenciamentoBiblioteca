@@ -49,6 +49,74 @@ public class GeneroServiceTests
     }
 
     [Fact]
+    public async Task GetByIdAsync_ReturnsGenero_WhenExists()
+    {
+        var id = Guid.NewGuid();
+        var genero = new Genero { Id = id, Nome = "Romance", Descricao = "Livros de romance" };
+
+        _repositoryMock.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(genero);
+
+        var result = await _service.GetByIdAsync(id);
+
+        Assert.NotNull(result);
+        Assert.Equal("Romance", result!.Nome);
+        Assert.Equal("Livros de romance", result.Descricao);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_ReturnsNull_WhenNotExists()
+    {
+        var id = Guid.NewGuid();
+        _repositoryMock.Setup(r => r.GetByIdAsync(id)).ReturnsAsync((Genero?)null);
+
+        var result = await _service.GetByIdAsync(id);
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ReturnsUpdatedGenero_WhenExists()
+    {
+        var id = Guid.NewGuid();
+        var generoExistente = new Genero { Id = id, Nome = "Antigo", Descricao = "Desc antiga" };
+        var dto = new AtualizarGeneroDto { Nome = "Atualizado", Descricao = "Desc nova" };
+
+        _repositoryMock.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(generoExistente);
+        _repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Genero>())).ReturnsAsync((Genero g) => g);
+
+        var result = await _service.UpdateAsync(id, dto);
+
+        Assert.NotNull(result);
+        Assert.Equal("Atualizado", result!.Nome);
+        Assert.Equal("Desc nova", result.Descricao);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ReturnsNull_WhenNotExists()
+    {
+        var id = Guid.NewGuid();
+        var dto = new AtualizarGeneroDto { Nome = "Teste" };
+
+        _repositoryMock.Setup(r => r.GetByIdAsync(id)).ReturnsAsync((Genero?)null);
+
+        var result = await _service.UpdateAsync(id, dto);
+
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ReturnsTrue_WhenExists()
+    {
+        var id = Guid.NewGuid();
+        _repositoryMock.Setup(r => r.ExistsAsync(id)).ReturnsAsync(true);
+
+        var result = await _service.DeleteAsync(id);
+
+        Assert.True(result);
+        _repositoryMock.Verify(r => r.DeleteAsync(id), Times.Once);
+    }
+
+    [Fact]
     public async Task DeleteAsync_ReturnsFalse_WhenGeneroNotExists()
     {
         var id = Guid.NewGuid();
